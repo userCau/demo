@@ -37,6 +37,12 @@ public class UsuarioController {
     return "redirect:/usuarios";
 }
 
+@GetMapping("/editar/{id}")
+    public String editarUsuario(@PathVariable Long id, Model model) {
+        model.addAttribute("usuario", usuarioService.buscarPorId(id));
+        return "usuarioCadastro";
+    }
+
 
     @GetMapping("/deletar/{id}")
     public String deletarUsuario(@PathVariable Long id) {
