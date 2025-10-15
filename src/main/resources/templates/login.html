@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #007bff, #6c63ff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            background-color: #fff;
+            padding: 40px 35px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+        }
+
+        .login-container img {
+            width: 80px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        .login-container h2 {
+            color: #007bff;
+            margin-bottom: 25px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .input-group input {
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: #007bff;
+        }
+
+        button {
+            width: 100%;
+            background-color: #007bff;
+            border: none;
+            padding: 12px;
+            color: white;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .footer-text a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .footer-text a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="login-container">
+        <!-- LOGO -->
+        <img th:src="@{/images/GESTOK2.png}" alt="Logo do Sistema">
+        
+        <h2>Login</h2>
+        <form th:action="@{/login}" method="post">
+    <div class="input-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Digite seu email" required>
+    </div>
+
+    <div class="input-group">
+        <label for="password">Senha</label>
+        <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
+    </div>
+
+    <button type="submit">Entrar</button>
+
+    <p th:if="${param.error}" style="color: red; text-align: center;">
+        Email ou senha incorretos!
+    </p>
+
+    <p th:if="${param.logout}" style="color: green; text-align: center;">
+        Logout realizado com sucesso!
+    </p>
+</form>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}">
+    <link rel="stylesheet" th:href="@{/css/welcome.css}">
+    <style>
+        main {
+            padding: 20px;
+        }
+
+        
+        .dashboard-cards {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            flex: 1 1 200px;
+            text-align: center;
+        }
+        .card h2 {
+            font-size: 2em;
+            margin: 0;
+        }
+        .card p {
+            font-size: 1.2em;
+            color: #555;
+        }
+        .card-total {
+            color: #007bff;
+        }
+        .card-warning {
+            color: orange;
+        }
+        .card-danger {
+            color: red;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+    </style>
+</head>
+<body>
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main>
+        <h1>Dashboard</h1>
+        <div class="dashboard-cards">
+            <!-- Total Produtos -->
+            <div class="card">
+                <h2 class="card-total" th:text="${totalProdutos}">0</h2>
+                <p>Produtos Registrados</p>
+            </div>
+            <!-- Total Usuários -->
+            <div class="card">
+                <h2 class="card-total" th:text="${totalUsuarios}">0</h2>
+                <p>Usuários Registrados</p>
+            </div>
+            <!-- Produtos Próximos do Vencimento -->
+            <div class="card">
+                <h2 class="card-warning" th:text="${produtosProximoVencimento.size()}">0</h2>
+                <p>Produtos Próximos do Vencimento</p>
+                <!-- <ul> 
+                    <li th:each="p : ${produtosProximoVencimento}" th:text="${p.nome} + ' - ' + ${p.validade}"></li>
+                </ul>-->
+            </div>
+            <!-- Produtos Vencidos -->
+            <div class="card">
+                <h2 class="card-danger" th:text="${produtosVencidos.size()}">0</h2>
+                <p>Produtos Vencidos</p>
+                <!-- <ul> 
+                    <li th:each="p : ${produtosVencidos}" th:text="${p.nome} + ' - ' + ${p.validade}"></li>
+                </ul>-->
+            </div>
+        </div>
+    </main>
+</body>
+</html>

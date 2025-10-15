@@ -1,0 +1,34 @@
+<!-- templates/fragments/sidebar.html -->
+<nav th:fragment="sidebar" class="menu-lateral">
+    <div class="btn-expandir">
+        <i class="bi bi-list"></i>
+    </div>
+
+    <ul>
+        
+        <li class="item-menu">
+            <a th:href="@{/}">
+                <span class="icon"><i class="bi bi-columns-gap"></i></span>
+                <span class="txt-link">Dashboard</span>
+            </a>
+        </li>
+        <li class="item-menu">
+            <a th:href="@{/produtos}">
+                <span class="icon"><i class="bi bi-basket3"></i></span>
+                <span class="txt-link">Produtos</span>
+            </a>
+        </li>
+        <li class="item-menu">
+            <a th:href="@{/usuarios}">
+                <span class="icon"><i class="bi bi-people"></i></span>
+                <span class="txt-link">Usuários</span>
+            </a>
+        </li>
+        <li class="item-menu">
+            <a th:href="@{/logout}">
+                <span class="icon"><i class="bi bi-box-arrow-left"></i></span>
+                <span class="txt-link">Sair</span>
+            </a>
+        </li>  
+    </ul>
+</nav>
