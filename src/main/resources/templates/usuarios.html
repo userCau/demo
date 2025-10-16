@@ -146,6 +146,7 @@
                     <th>Nome</th>
                     <th>Email</th>
                     <th>Data Nascimento</th>
+                    <th>Tipo</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -155,6 +156,7 @@
                     <td th:text="${usuario.nome}"></td>
                     <td th:text="${usuario.email}"></td>
                     <td th:text="${#temporals.format(usuario.dataNascimento, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${usuario.role}"></td>
                     <td>
                         <a th:href="@{|/usuarios/editar/${usuario.id}|}" class="btn-action btn-edit">Editar</a>
                         <a th:href="@{|/usuarios/deletar/${usuario.id}|}" class="btn-action btn-delete">Apagar</a>

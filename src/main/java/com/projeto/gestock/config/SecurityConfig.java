@@ -23,7 +23,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -37,11 +36,13 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/login", "/usuarios/salvar", "/css/**", "/images/**").permitAll()
+                .requestMatchers("/usuarios/**").hasRole("ADMIN") // só admin acessa /usuarios
+                
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
                 .loginPage("/login")
-                .usernameParameter("email") // 👈 ESSENCIAL para autenticar por email
+                .usernameParameter("email")
                 .defaultSuccessUrl("/", true)
                 .permitAll()
             )
@@ -49,7 +50,7 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/login?logout")
                 .permitAll()
             )
-            .csrf(csrf -> csrf.disable()); // opcional (pode remover depois se usar tokens)
+            .csrf(csrf -> csrf.disable());
 
         return http.build();
     }
