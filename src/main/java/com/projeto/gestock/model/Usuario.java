@@ -19,15 +19,24 @@ public class Usuario {
 
     private LocalDate dataNascimento;
 
+    private String role = "USER"; // padrão: usuário comum
+
     // Getters e Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
+
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+
     public String getSenha() { return senha; }
     public void setSenha(String senha) { this.senha = senha; }
+
     public LocalDate getDataNascimento() { return dataNascimento; }
     public void setDataNascimento(LocalDate dataNascimento) { this.dataNascimento = dataNascimento; }
+
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 }
