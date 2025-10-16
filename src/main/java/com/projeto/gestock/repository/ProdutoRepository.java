@@ -7,5 +7,5 @@ import com.projeto.gestock.model.Produto;
 
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
-    // Aqui você pode adicionar métodos de busca customizados
+    
 }

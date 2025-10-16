@@ -19,7 +19,7 @@ public class Usuario {
 
     private LocalDate dataNascimento;
 
-    private String role = "USER"; // padrão: usuário comum
+    private String role = "USER"; 
 
     // Getters e Setters
     public Long getId() { return id; }

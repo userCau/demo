@@ -8,12 +8,12 @@ public class LoginController {
 
     @GetMapping("/login")
     public String login() {
-        return "login"; // login.html no templates
+        return "login"; 
     }
 
     @GetMapping("/logout")
     public String logout() {
-        return "logout"; // login.html no templates
+        return "logout"; 
     }
 
     

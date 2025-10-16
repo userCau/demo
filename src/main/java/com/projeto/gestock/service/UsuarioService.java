@@ -16,10 +16,10 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder; // 👈 injeta o encoder definido em SecurityConfig
+    private PasswordEncoder passwordEncoder; // injeta o encoder definido em SecurityConfig
 
     public Usuario salvarUsuario(Usuario usuario) {
-        // ✅ Criptografa a senha antes de salvar
+        // Criptografa a senha antes de salvar
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         return usuarioRepository.save(usuario);
     }

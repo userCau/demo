@@ -50,6 +50,11 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/login?logout")
                 .permitAll()
             )
+
+            .exceptionHandling(ex -> ex
+            .accessDeniedPage("/acessoNegado")
+            )
+
             .csrf(csrf -> csrf.disable());
 
         return http.build();

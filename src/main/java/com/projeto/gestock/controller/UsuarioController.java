@@ -48,4 +48,6 @@ public class UsuarioController {
         usuarioService.deletarUsuario(id);
         return "redirect:/usuarios";
     }
+
+    
 }

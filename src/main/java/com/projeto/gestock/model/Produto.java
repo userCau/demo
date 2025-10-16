@@ -19,7 +19,7 @@ public class Produto {
     private Double preco;
     private LocalDate validade;
 
-    // Atributo temporário para a view (não será persistido)
+    // Atributo temporário para a view
     @jakarta.persistence.Transient
     private String status;
 
