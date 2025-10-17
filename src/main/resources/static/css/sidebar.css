@@ -100,3 +100,10 @@ main {
 nav {
     font-family: Arial, Helvetica, sans-serif;
 }
+
+.btn-expandir { 
+    width: 100%; padding-left: 1px; 
+} 
+.btn-expandir > i {
+     color: rgb(255, 255, 255); font-size: 26px; cursor: pointer; 
+    }
