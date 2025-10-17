@@ -1,138 +1,229 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+
+    <!-- Ícones -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <!-- Fonte -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <link rel="stylesheet" th:href="@{/css/sidebar.css}">
+
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background: #f5f7fb;
-            color: #333;
+            background: #f9fafc;
             margin: 0;
+            color: #333;
         }
 
         main {
             padding: 40px;
-            margin-left: 250px; /* espaço pro sidebar */
+            margin-left: 250px;
+            min-height: 100vh;
+            background: #f9fafc;
         }
 
         h1 {
-            font-size: 2em;
+            font-size: 2rem;
             font-weight: 600;
-            color: #2d2f36;
-            margin-bottom: 30px;
+            color: #222;
+            margin-bottom: 35px;
         }
 
         .dashboard-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
             gap: 25px;
+            margin-bottom: 40px;
         }
 
         .card {
             background: white;
             border-radius: 16px;
-            padding: 30px 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            padding: 25px 20px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
             text-align: center;
-            transition: transform 0.2s ease, box-shadow 0.3s ease;
             position: relative;
             overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
         }
 
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
         }
 
-        .card i {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            opacity: 0.9;
+        .icon-wrapper {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        .icon-blue {
+            background: #007bff;
+        }
+
+        .icon-green {
+            background: #00b894;
+        }
+
+        .icon-orange {
+            background: #f9a825;
+        }
+
+        .icon-red {
+            background: #e53935;
         }
 
         .card h2 {
-            font-size: 2rem;
-            margin: 5px 0;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 10px 0;
         }
 
         .card p {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #555;
+            margin: 0;
         }
 
-        .card-total {
-            color: #007bff;
+        /* Seção de gráficos */
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
         }
 
-        .card-total i { color: #007bff; }
-
-        .card-warning {
-            color: #ffb300;
+        .chart-box {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
         }
 
-        .card-warning i { color: #ffb300; }
-
-        .card-danger {
-            color: #e53935;
+        .chart-box h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: #333;
         }
 
-        .card-danger i { color: #e53935; }
-
-        /* animação de entrada */
         @keyframes fadeIn {
             from {
                 opacity: 0;
                 transform: translateY(10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
-        .card {
-            animation: fadeIn 0.5s ease both;
+        .card,
+        .chart-box {
+            animation: fadeIn 0.6s ease both;
         }
     </style>
 </head>
+
 <body>
+    <!-- Sidebar -->
     <div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
     <main>
         <h1>Dashboard</h1>
+
+        <!-- Cards -->
         <div class="dashboard-cards">
-            <!-- Total Produtos -->
             <div class="card">
-                <i class="bi bi-box-seam"></i>
-                <h2 class="card-total" th:text="${totalProdutos}">0</h2>
+                <div class="icon-wrapper icon-blue"><i class="bi bi-box-seam"></i></div>
+                <h2 th:text="${totalProdutos}">0</h2>
                 <p>Produtos Registrados</p>
             </div>
 
-            <!-- Total Usuários -->
             <div class="card">
-                <i class="bi bi-people"></i>
-                <h2 class="card-total" th:text="${totalUsuarios}">0</h2>
+                <div class="icon-wrapper icon-green"><i class="bi bi-people"></i></div>
+                <h2 th:text="${totalUsuarios}">0</h2>
                 <p>Usuários Registrados</p>
             </div>
 
-            <!-- Produtos Próximos do Vencimento -->
             <div class="card">
-                <i class="bi bi-exclamation-triangle"></i>
-                <h2 class="card-warning" th:text="${produtosProximoVencimento.size()}">0</h2>
+                <div class="icon-wrapper icon-orange"><i class="bi bi-exclamation-triangle"></i></div>
+                <h2 th:text="${produtosProximoVencimento.size()}">0</h2>
                 <p>Produtos Próximos do Vencimento</p>
             </div>
 
-            <!-- Produtos Vencidos -->
             <div class="card">
-                <i class="bi bi-x-circle"></i>
-                <h2 class="card-danger" th:text="${produtosVencidos.size()}">0</h2>
+                <div class="icon-wrapper icon-red"><i class="bi bi-x-circle"></i></div>
+                <h2 th:text="${produtosVencidos.size()}">0</h2>
                 <p>Produtos Vencidos</p>
             </div>
         </div>
+
+        <!-- Gráficos -->
+        <div class="charts-container">
+            <div class="chart-box">
+                <h3>Produtos por Categoria</h3>
+                <canvas id="chartCategorias"></canvas>
+            </div>
+
+            <div class="chart-box">
+                <h3>Produtos por Status</h3>
+                <canvas id="chartStatus"></canvas>
+            </div>
+        </div>
     </main>
+
+    <!-- Gráficos com Chart.js -->
+    <script>
+        // Exemplo de dados (substitua pelos reais via Thymeleaf)
+        const categoriasData = {
+            labels: ['Bebidas', 'Frios', 'Higiene', 'Padaria', 'Mercearia'],
+            datasets: [{
+                data: [30, 15, 20, 10, 25],
+                backgroundColor: ['#007bff', '#00b894', '#f9a825', '#e53935', '#9b59b6']
+            }]
+        };
+
+        const statusData = {
+            labels: ['Em estoque', 'Próx. vencimento', 'Vencidos'],
+            datasets: [{
+                label: 'Quantidade',
+                data: [120, 10, 4],
+                backgroundColor: ['#00b894', '#f9a825', '#e53935']
+            }]
+        };
+
+        new Chart(document.getElementById('chartCategorias'), {
+            type: 'doughnut',
+            data: categoriasData,
+            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+        });
+
+        new Chart(document.getElementById('chartStatus'), {
+            type: 'bar',
+            data: statusData,
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+    </script>
 </body>
+
 </html>
