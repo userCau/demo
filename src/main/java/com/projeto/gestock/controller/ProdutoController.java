@@ -18,10 +18,17 @@ public class ProdutoController {
     }
 
     @GetMapping
-    public String listarProdutos(Model model) {
+public String listarProdutos(@RequestParam(required = false) String nome, Model model) {
+    if (nome != null && !nome.isBlank()) {
+        model.addAttribute("produtos", produtoService.buscarPorNome(nome));
+    } else {
         model.addAttribute("produtos", produtoService.listarTodos());
-        return "produtos";
     }
+
+    model.addAttribute("nome", nome); // mantém o texto digitado na barra
+    return "produtos"; // o nome da view que mostra a lista
+}
+
 
     @GetMapping("/novo")
     public String mostrarFormularioCadastro(Model model) {

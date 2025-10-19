@@ -196,12 +196,15 @@
     <!-- Conteúdo principal -->
     <main>
         <h1>Lista de Produtos</h1>
-
         <div class="top-bar">
-            <div class="search-box">
-                <i class="bi bi-search"></i>
-                <input type="text" placeholder="Pesquisar produtos..." />
-            </div>
+            <form class="search-box" th:action="@{/produtos}" method="get">
+            <i class="bi bi-search"></i>
+            <input type="text" name="nome" th:value="${nome}" placeholder="Pesquisar produtos..." />
+            <button type="submit" style="border:none;background:none;cursor:pointer;">
+        <i class="bi bi-arrow-right-circle" style="color:#007bff;font-size:18px;"></i>
+    
+        </form>
+
             <a th:href="@{/produtos/novo}" class="add-btn">
                 <i class="bi bi-plus-circle"></i> Adicionar Produto
             </a>
