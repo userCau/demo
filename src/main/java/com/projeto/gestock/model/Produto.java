@@ -15,6 +15,7 @@ public class Produto {
 
     private String nome;
     private String descricao;
+    private Integer quantidade;
     private String categoria;
     private Double preco;
     private LocalDate validade;
@@ -44,4 +45,7 @@ public class Produto {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public Integer getQuantidade() { return quantidade; }
+    public void setQuantidade(Integer quantidade) { this.quantidade = quantidade; }
 }

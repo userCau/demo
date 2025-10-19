@@ -213,6 +213,7 @@
                     <th>ID</th>
                     <th>Produto</th>
                     <th>Descrição</th>
+                    <th>Quantidade</th>
                     <th>Categoria</th>
                     <th>Preço</th>
                     <th>Validade</th>
@@ -224,6 +225,7 @@
                     <td th:text="${produto.id}"></td>
                     <td th:text="${produto.nome}"></td>
                     <td th:text="${produto.descricao}"></td>
+                    <td th:text="${produto.quantidade}"></td>
                     <td th:text="${produto.categoria}"></td>
                     <td th:text="${produto.preco}"></td>
                     <td th:text="${#temporals.format(produto.validade, 'dd/MM/yyyy')}"></td>
