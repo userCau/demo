@@ -1,7 +1,11 @@
 package com.projeto.gestock.service;
 
 import org.springframework.stereotype.Service;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.projeto.gestock.model.Produto;
 import com.projeto.gestock.repository.ProdutoRepository;
 
@@ -33,5 +37,22 @@ public class ProdutoService {
 
     public List<Produto> buscarPorNome(String nome) {
         return produtoRepository.findByNomeContainingIgnoreCase(nome);
+    }
+
+    // 🔹 Novo: contar produtos por categoria
+    public Map<String, Long> contarPorCategoria() {
+        return produtoRepository.findAll().stream()
+                .collect(Collectors.groupingBy(Produto::getCategoria, Collectors.counting()));
+    }
+
+    // 🔹 Novo: contar produtos por status (validade)
+    public Map<String, Long> contarPorStatus() {
+        return produtoRepository.findAll().stream()
+                .collect(Collectors.groupingBy(produto -> {
+                    if (produto.getValidade() == null) return "Sem validade";
+                    if (produto.getValidade().isBefore(LocalDate.now())) return "Vencido";
+                    if (produto.getValidade().isBefore(LocalDate.now().plusDays(7))) return "Próx. vencimento";
+                    return "Em estoque";
+                }, Collectors.counting()));
     }
 }

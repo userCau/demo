@@ -189,42 +189,41 @@
         </div>
     </main>
 
-    <!-- Gráficos com Chart.js -->
-    <script>
-        // Exemplo de dados (substitua pelos reais via Thymeleaf)
-        const categoriasData = {
-            labels: ['Bebidas', 'Frios', 'Higiene', 'Padaria', 'Mercearia'],
-            datasets: [{
-                data: [30, 15, 20, 10, 25],
-                backgroundColor: ['#007bff', '#00b894', '#f9a825', '#e53935', '#9b59b6']
-            }]
-        };
+    <script th:inline="javascript">
+    // Dados vindos do backend (Spring → Thymeleaf → JavaScript)
+    const categoriasData = {
+        labels: /*[[${categorias.keySet()}]]*/ [],
+        datasets: [{
+            data: /*[[${categorias.values()}]]*/ [],
+            backgroundColor: ['#007bff', '#00b894', '#f9a825', '#e53935', '#9b59b6']
+        }]
+    };
 
-        const statusData = {
-            labels: ['Em estoque', 'Próx. vencimento', 'Vencidos'],
-            datasets: [{
-                label: 'Quantidade',
-                data: [120, 10, 4],
-                backgroundColor: ['#00b894', '#f9a825', '#e53935']
-            }]
-        };
+    const statusData = {
+        labels: /*[[${status.keySet()}]]*/ [],
+        datasets: [{
+            data: /*[[${status.values()}]]*/ [],
+            backgroundColor: ['#00b894', '#f9a825', '#e53935', '#9b59b6']
+        }]
+    };
 
-        new Chart(document.getElementById('chartCategorias'), {
-            type: 'doughnut',
-            data: categoriasData,
-            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-        });
+    new Chart(document.getElementById('chartCategorias'), {
+        type: 'doughnut',
+        data: categoriasData,
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+    });
 
-        new Chart(document.getElementById('chartStatus'), {
-            type: 'bar',
-            data: statusData,
-            options: {
-                responsive: true,
-                plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true } }
-            }
-        });
-    </script>
+    new Chart(document.getElementById('chartStatus'), {
+        type: 'bar',
+        data: statusData,
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+</script>
+
 </body>
 
 </html>
