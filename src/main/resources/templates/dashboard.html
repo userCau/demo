@@ -190,7 +190,7 @@
     </main>
 
     <script th:inline="javascript">
-    // Dados vindos do backend (Spring → Thymeleaf → JavaScript)
+    // Dados do gráfico de categorias
     const categoriasData = {
         labels: /*[[${categorias.keySet()}]]*/ [],
         datasets: [{
@@ -199,18 +199,40 @@
         }]
     };
 
+    // Dados do gráfico de status
+    const statusLabels = /*[[${status.keySet()}]]*/ [];
+    const statusValues = /*[[${status.values()}]]*/ [];
+
+    // Função para normalizar textos (remove acentos e deixa minúsculo)
+    const normalize = str => str
+        ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+        : "";
+
+    // Define cores conforme o nome do status
+    const statusColors = statusLabels.map(label => {
+        const lower = normalize(label);
+
+        if (lower.includes("vencido")) return "#e53935"; // vermelho
+        if (lower.includes("proximo") || lower.includes("prox")) return "#f9a825"; // amarelo
+        if (lower.includes("estoque")) return "#007bff"; // azul
+        return "#9b59b6"; // cor padrão (roxo)
+    });
+
     const statusData = {
-        labels: /*[[${status.keySet()}]]*/ [],
+        labels: statusLabels,
         datasets: [{
-            data: /*[[${status.values()}]]*/ [],
-            backgroundColor: ['#00b894', '#f9a825', '#e53935', '#9b59b6']
+            data: statusValues,
+            backgroundColor: statusColors
         }]
     };
 
     new Chart(document.getElementById('chartCategorias'), {
         type: 'doughnut',
         data: categoriasData,
-        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+        options: {
+            responsive: true,
+            plugins: { legend: { position: 'bottom' } }
+        }
     });
 
     new Chart(document.getElementById('chartStatus'), {
@@ -223,6 +245,8 @@
         }
     });
 </script>
+
+
 
 </body>
 
