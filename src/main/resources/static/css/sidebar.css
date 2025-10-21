@@ -1,3 +1,5 @@
+@import url('vars.css');
+
 /* Reset básico */
 * {
     margin: 0;
@@ -9,9 +11,9 @@
 nav.menu-lateral {
     width: 70px;
     height: 100%;
-    background-color: rgb(55, 43, 226);
+    background-color: var(--cor-primaria);
     padding: 40px 0 40px 1%;
-    box-shadow: 3px 0 0 #607bf1;
+    box-shadow: 3px 0 0 var(--cor-primaria);
     position: fixed;
     top: 0;
     left: 0;
@@ -19,7 +21,7 @@ nav.menu-lateral {
     transition: 0.2s;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* 🔥 coloca o item do usuário no final */
+    justify-content: space-between; /*coloca o item do usuário no final */
 }
 
 /* Lista do menu */
@@ -35,7 +37,7 @@ ul li.item-menu {
 }
 
 ul li.item-menu a {
-    color: white;
+    color: var(--cor-fundo);
     text-decoration: none;
     font-size: 20px;
     padding: 20px 4%;
@@ -46,7 +48,7 @@ ul li.item-menu a {
 }
 
 ul li.item-menu:hover {
-    background: #4547f1;
+    background: var(--cor-primaria-hover);
 }
 
 ul li.item-menu a .txt-link {
@@ -65,7 +67,7 @@ li.usuario {
 }
 
 li.usuario a {
-    color: #fff;
+    color: var(--cor-fundo);
     text-decoration: none;
     font-size: 20px;
     display: flex;
@@ -105,5 +107,6 @@ nav {
     width: 100%; padding-left: 1px; 
 } 
 .btn-expandir > i {
-     color: rgb(255, 255, 255); font-size: 26px; cursor: pointer; 
+     color: var(--cor-fundo); 
+     font-size: 26px; cursor: pointer; 
     }

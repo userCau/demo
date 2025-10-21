@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,82 +8,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" th:href="@{/css/sidebar.css}">
     <link rel="stylesheet" th:href="@{/css/welcome.css}">
-    <style>
-        body, h2, label, input, button, select {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background-color: #f4f4f9;
-            padding: 20px;
-            color: #333;
-        }
-
-        form {
-            max-width: 500px;
-            margin: 40px auto;
-            background-color: #fff;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        h2 {
-            text-align: center;
-            color: #007bff;
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-top: 15px;
-            font-weight: bold;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            font-size: 14px;
-        }
-
-        button {
-            margin-top: 20px;
-            width: 100%;
-            padding: 10px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #218838;
-        }
-
-        @media (max-width: 768px) {
-            form {
-                margin: 20px;
-                padding: 20px;
-            }
-            button {
-                font-size: 14px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/usuarioCadastro.css}">
 </head>
+
 <body>
     <div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
@@ -91,16 +19,22 @@
         <h2>Cadastro de Usuário</h2>
 
         <label for="nome">Nome:</label>
-        <input type="text" id="nome" th:field="*{nome}" placeholder="Digite o nome" required>
+        <input type="text" id="nome" th:field="*{nome}" placeholder="Digite o nome" required oninput="validarNome()">
+        <p id="erroNome"></p>
 
         <label for="email">Email:</label>
         <input type="email" id="email" th:field="*{email}" placeholder="Digite o email" required>
 
+        <label for="dataNascimento">Data de Nascimento:</label>
+        <input type="date" id="dataNascimento" th:field="*{dataNascimento}" required>
+
         <label for="senha">Senha:</label>
         <input type="password" id="senha" th:field="*{senha}" placeholder="Digite a senha" required>
 
-        <label for="dataNascimento">Data de Nascimento:</label>
-        <input type="date" id="dataNascimento" th:field="*{dataNascimento}" required>
+        <label for="confirm_password">Confirmar Senha:</label>
+        <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirme a sua senha" required
+            oninput="validarSenhas()">
+        <p id="erroSenha"></p>
 
         <!-- Campo de seleção da role -->
         <label for="role">Função:</label>
@@ -108,8 +42,41 @@
             <option value="USER">Usuário</option>
             <option value="ADMIN">Administrador</option>
         </select>
-
         <button type="submit"><i class="bi bi-person-plus"></i> Cadastrar Usuário</button>
     </form>
+
+    <script>
+        function validarSenhas() {
+            let senha = document.getElementById("password").value;
+            let confirmarSenha = document.getElementById("confirm_password").value;
+            if (senha !== confirmarSenha) {
+                document.getElementById("erroSenha").innerText = "As senhas não coincidem!";
+                return false;
+            }
+            else {
+                document.getElementById("erroSenha").innerText = "";
+                return true;
+            }
+        }
+
+        function validarNome() {
+            let nome = document.getElementById("name").value;
+            let letras = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/;
+
+            if (!letras.test(nome)) {
+                document.getElementById("erroNome").innerText = "O nome deve conter apenas letras.";
+                return false;
+            }
+
+            else {
+                document.getElementById("erroNome").innerText = "";
+                return true;
+            }
+
+        }
+    </script>
+
+
 </body>
+
 </html>
