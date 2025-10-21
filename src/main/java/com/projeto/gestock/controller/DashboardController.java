@@ -24,24 +24,24 @@ public class DashboardController {
 
     @GetMapping("/")
     public String dashboard(Model model) {
-        // Total de produtos e usuários
         List<Produto> todosProdutos = produtoService.listarTodos();
         long totalProdutos = todosProdutos.size();
         long totalUsuarios = usuarioService.buscarTodosUsuarios().size();
 
-        // Produtos vencidos
         List<Produto> produtosVencidos = todosProdutos.stream()
                 .filter(p -> p.getValidade() != null && p.getValidade().isBefore(LocalDate.now()))
                 .collect(Collectors.toList());
 
-        // Produtos próximos do vencimento (7 dias)
         List<Produto> produtosProximoVencimento = todosProdutos.stream()
                 .filter(p -> p.getValidade() != null
                         && !p.getValidade().isBefore(LocalDate.now())
                         && !p.getValidade().isAfter(LocalDate.now().plusDays(7)))
                 .collect(Collectors.toList());
 
-        // Adiciona atributos ao modelo
+        // 🔹 Adiciona dados para os gráficos
+        model.addAttribute("categorias", produtoService.contarPorCategoria());
+        model.addAttribute("status", produtoService.contarPorStatus());
+
         model.addAttribute("totalProdutos", totalProdutos);
         model.addAttribute("totalUsuarios", totalUsuarios);
         model.addAttribute("produtosVencidos", produtosVencidos);

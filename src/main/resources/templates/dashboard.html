@@ -68,42 +68,65 @@
         </div>
     </main>
 
-    <!-- Gráficos com Chart.js -->
-    <script>
-        // Exemplo de dados (substitua pelos reais via Thymeleaf)
-        const categoriasData = {
-            labels: ['Bebidas', 'Frios', 'Higiene', 'Padaria', 'Mercearia'],
-            datasets: [{
-                data: [30, 15, 20, 10, 25],
-                backgroundColor: ['#007bff', '#00b894', '#f9a825', '#e53935', '#9b59b6']
-            }]
-        };
+    <script th:inline="javascript">
+    // Dados do gráfico de categorias
+    const categoriasData = {
+        labels: /*[[${categorias.keySet()}]]*/ [],
+        datasets: [{
+            data: /*[[${categorias.values()}]]*/ [],
+            backgroundColor: ['#007bff', '#00b894', '#f9a825', '#e53935', '#9b59b6']
+        }]
+    };
 
-        const statusData = {
-            labels: ['Em estoque', 'Próx. vencimento', 'Vencidos'],
-            datasets: [{
-                label: 'Quantidade',
-                data: [120, 10, 4],
-                backgroundColor: ['#00b894', '#f9a825', '#e53935']
-            }]
-        };
+    // Dados do gráfico de status
+    const statusLabels = /*[[${status.keySet()}]]*/ [];
+    const statusValues = /*[[${status.values()}]]*/ [];
 
-        new Chart(document.getElementById('chartCategorias'), {
-            type: 'doughnut',
-            data: categoriasData,
-            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-        });
+    // Função para normalizar textos (remove acentos e deixa minúsculo)
+    const normalize = str => str
+        ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+        : "";
 
-        new Chart(document.getElementById('chartStatus'), {
-            type: 'bar',
-            data: statusData,
-            options: {
-                responsive: true,
-                plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true } }
-            }
-        });
-    </script>
+    // Define cores conforme o nome do status
+    const statusColors = statusLabels.map(label => {
+        const lower = normalize(label);
+
+        if (lower.includes("vencido")) return "#e53935"; // vermelho
+        if (lower.includes("proximo") || lower.includes("prox")) return "#f9a825"; // amarelo
+        if (lower.includes("estoque")) return "#007bff"; // azul
+        return "#9b59b6"; // cor padrão (roxo)
+    });
+
+    const statusData = {
+        labels: statusLabels,
+        datasets: [{
+            data: statusValues,
+            backgroundColor: statusColors
+        }]
+    };
+
+    new Chart(document.getElementById('chartCategorias'), {
+        type: 'doughnut',
+        data: categoriasData,
+        options: {
+            responsive: true,
+            plugins: { legend: { position: 'bottom' } }
+        }
+    });
+
+    new Chart(document.getElementById('chartStatus'), {
+        type: 'bar',
+        data: statusData,
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+</script>
+
+
+
 </body>
 
 </html>

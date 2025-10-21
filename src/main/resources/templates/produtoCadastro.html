@@ -24,6 +24,9 @@
     <label for="descricao">Descrição:</label>
     <textarea id="descricao" th:field="*{descricao}" rows="3" required></textarea>
 
+    <label for="quantidade">Quantidade</label>
+    <input type="number" id="quantidade" name="quantidade" class="form-control" th:field="*{quantidade}" required>
+
     <label for="categoria">Categoria:</label>
     <select id="categoria" th:field="*{categoria}" required>
         <option value="">Selecione</option>
