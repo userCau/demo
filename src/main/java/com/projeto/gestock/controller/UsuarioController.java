@@ -17,42 +17,43 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    // Listar todos os usuários
+    // 🔍 Listar usuários com filtro
     @GetMapping
-    public String listarUsuarios(Model model) {
-        model.addAttribute("usuarios", usuarioService.buscarTodosUsuarios());
+    public String listarUsuarios(@RequestParam(value = "termo", required = false) String termo, Model model) {
+        model.addAttribute("usuarios", usuarioService.buscarPorNomeOuEmail(termo));
+        model.addAttribute("termo", termo); // mantém o valor digitado
         return "usuarios";
     }
 
-    // Formulário para novo usuário
+    // ➕ Novo usuário
     @GetMapping("/novo")
     public String novoUsuario(Model model) {
         model.addAttribute("usuario", new Usuario());
         return "usuarioCadastro";
     }
 
-    // Salvar usuário (novo ou edição)
+    // 💾 Salvar usuário
     @PostMapping("/salvar")
     public String salvarUsuario(@ModelAttribute Usuario usuario) {
         usuarioService.salvarUsuario(usuario);
         return "redirect:/usuarios";
     }
 
-    // Editar usuário existente
+    // ✏️ Editar usuário existente
     @GetMapping("/editar/{id}")
     public String editarUsuario(@PathVariable Long id, Model model) {
         model.addAttribute("usuario", usuarioService.buscarPorId(id));
         return "usuarioCadastro";
     }
 
-    // Deletar usuário
+    // 🗑️ Deletar usuário
     @GetMapping("/deletar/{id}")
     public String deletarUsuario(@PathVariable Long id) {
         usuarioService.deletarUsuario(id);
         return "redirect:/usuarios";
     }
 
-    // ✅ Página de configurações do próprio usuário logado
+    // ⚙️ Configurações do usuário logado
     @GetMapping("/config")
     public String usuarioConfig(Model model, Principal principal) {
         Usuario usuario = usuarioService.buscarPorEmail(principal.getName());
@@ -60,7 +61,7 @@ public class UsuarioController {
         return "usuarioConfig";
     }
 
-    // ✅ Atualizar senha
+    // 🔐 Atualizar senha
     @PostMapping("/atualizarSenha")
     public String atualizarSenha(@RequestParam String senhaAtual,
                                  @RequestParam String novaSenha,

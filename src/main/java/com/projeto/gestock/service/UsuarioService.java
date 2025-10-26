@@ -18,8 +18,7 @@ public class UsuarioService {
     private PasswordEncoder passwordEncoder;
 
     public Usuario salvarUsuario(Usuario usuario) {
-        // Criptografa a senha antes de salvar
-        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+        usuario.setSenha(passwordEncoder.encode(usuario.getSenha())); // criptografa senha
         return usuarioRepository.save(usuario);
     }
 
@@ -40,7 +39,6 @@ public class UsuarioService {
         return usuarioRepository.findByEmail(email).orElse(null);
     }
 
-    // ✅ Atualizar senha
     public boolean atualizarSenha(String email, String senhaAtual, String novaSenha) {
         Usuario usuario = buscarPorEmail(email);
         if (usuario != null && passwordEncoder.matches(senhaAtual, usuario.getSenha())) {
@@ -49,5 +47,13 @@ public class UsuarioService {
             return true;
         }
         return false;
+    }
+
+    // 🔍 Filtro de pesquisa
+    public List<Usuario> buscarPorNomeOuEmail(String termo) {
+        if (termo == null || termo.isEmpty()) {
+            return usuarioRepository.findAll();
+        }
+        return usuarioRepository.buscarPorNomeOuEmail(termo);
     }
 }

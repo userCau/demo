@@ -7,9 +7,10 @@
     <title>Lista de Usuários</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" th:href="@{/css/sidebar.css}">
-    <link rel="stylesheet" th:href="@{/css/welcome.css}">
     <link rel="stylesheet" th:href="@{/css/usuarios.css}">
 </head>
+   
+
 <body>
     <div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
@@ -17,13 +18,18 @@
         <h1>Lista de Usuários</h1>
 
         <div class="top-bar">
-            <div class="search-box">
+            
+            <form class="search-box" th:action="@{/usuarios}" method="get">
                 <i class="bi bi-search"></i>
-                <input type="text" placeholder="Pesquisar usuários..." />
-            </div>
-            <a th:href="@{/usuarios/novo}" class="add-btn">
+                <input type="text" name="termo" th:value="${termo}" placeholder="Pesquisar usuários..." />
+                <button type="submit" style="border:none;background:none;cursor:pointer;"></button>
+                <a th:href="@{/usuarios/novo}" class="add-btn">
                 <i class="bi bi-plus-circle"></i> Adicionar Usuário
             </a>
+            </form>
+
+            
+            
         </div>
 
         <table>
