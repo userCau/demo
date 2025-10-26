@@ -49,7 +49,8 @@
                     <td th:text="${produto.descricao}"></td>
                     <td th:text="${produto.quantidade}"></td>
                     <td th:text="${produto.categoria}"></td>
-                    <td th:text="${produto.preco}"></td>
+                    <td th:text="'R$ ' + ${produto.preco}"></td>
+
                     <td th:text="${#temporals.format(produto.validade, 'dd/MM/yyyy')}"></td>
                     <td>
                         <a th:href="@{|/produtos/editar/${produto.id}|}" class="btn-action btn-edit">Editar</a>
