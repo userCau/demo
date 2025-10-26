@@ -3,7 +3,6 @@ package com.projeto.gestock.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.projeto.gestock.model.Usuario;
 import com.projeto.gestock.repository.UsuarioRepository;
 
@@ -16,7 +15,7 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder; // injeta o encoder definido em SecurityConfig
+    private PasswordEncoder passwordEncoder;
 
     public Usuario salvarUsuario(Usuario usuario) {
         // Criptografa a senha antes de salvar
@@ -37,8 +36,18 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);
     }
 
-    // ✅ Adicione este método
     public Usuario buscarPorEmail(String email) {
         return usuarioRepository.findByEmail(email).orElse(null);
+    }
+
+    // ✅ Atualizar senha
+    public boolean atualizarSenha(String email, String senhaAtual, String novaSenha) {
+        Usuario usuario = buscarPorEmail(email);
+        if (usuario != null && passwordEncoder.matches(senhaAtual, usuario.getSenha())) {
+            usuario.setSenha(passwordEncoder.encode(novaSenha));
+            usuarioRepository.save(usuario);
+            return true;
+        }
+        return false;
     }
 }

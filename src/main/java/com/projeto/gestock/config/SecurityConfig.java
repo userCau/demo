@@ -32,31 +32,37 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/usuarios/salvar", "/css/**", "/images/**").permitAll()
-                .requestMatchers("/usuarios/**").hasRole("ADMIN") // só admin acessa /usuarios
-                
-                .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
-                .loginPage("/login")
-                .usernameParameter("email")
-                .defaultSuccessUrl("/", true)
-                .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutSuccessUrl("/login?logout")
-                .permitAll()
-            )
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http
+        .authorizeHttpRequests(auth -> auth
+            // Páginas públicas
+            .requestMatchers("/login", "/usuarios/salvar", "/css/**", "/images/**").permitAll()
 
-            .exceptionHandling(ex -> ex
+            // ✅ Permite que qualquer usuário autenticado (USER ou ADMIN) acesse a página de configuração
+            .requestMatchers("/usuarios/config", "/usuarios/atualizarSenha").authenticated()
+
+            // Somente ADMIN pode acessar rotas administrativas
+            .requestMatchers("/usuarios/**").hasRole("ADMIN")
+
+            // Todas as outras rotas precisam estar logadas
+            .anyRequest().authenticated()
+        )
+        .formLogin(form -> form
+            .loginPage("/login")
+            .usernameParameter("email")
+            .defaultSuccessUrl("/", true)
+            .permitAll()
+        )
+        .logout(logout -> logout
+            .logoutSuccessUrl("/login?logout")
+            .permitAll()
+        )
+        .exceptionHandling(ex -> ex
             .accessDeniedPage("/acessoNegado")
-            )
+        )
+        .csrf(csrf -> csrf.disable());
 
-            .csrf(csrf -> csrf.disable());
+    return http.build();
+}
 
-        return http.build();
-    }
 }
