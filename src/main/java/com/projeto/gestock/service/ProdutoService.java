@@ -55,4 +55,16 @@ public class ProdutoService {
                     return "Em estoque";
                 }, Collectors.counting()));
     }
+
+    public List<Produto> buscarPorValidadeAntesDe(LocalDate data) {
+        return produtoRepository.findByValidadeBefore(data);
+    }
+
+    public List<Produto> buscarPorValidadeEntre(LocalDate inicio, LocalDate fim) {
+        return produtoRepository.findByValidadeBetween(inicio, fim);
+    }
+
+    public List<Produto> buscarPorValidadeDepoisDe(LocalDate data) {
+        return produtoRepository.findByValidadeAfter(data);
+    }
 }

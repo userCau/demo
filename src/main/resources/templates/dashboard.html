@@ -27,11 +27,13 @@
 
         <!-- Cards -->
         <div class="dashboard-cards">
+            <a th:href="@{/produtos?status=validos}">
             <div class="card">
                 <div class="icon-wrapper icon-blue"><i class="bi bi-box-seam"></i></div>
                 <h2 th:text="${totalProdutos}">0</h2>
                 <p>Produtos Registrados</p>
             </div>
+            </a>
 
             <a th:href="@{/usuarios}">
                 <div class="card">
@@ -41,17 +43,21 @@
                 </div>
             </a>
 
+            <a th:href="@{/produtos?status=a_vencer}">
             <div class="card">
                 <div class="icon-wrapper icon-orange"><i class="bi bi-exclamation-triangle"></i></div>
                 <h2 th:text="${produtosProximoVencimento.size()}">0</h2>
                 <p>Produtos Próximos do Vencimento</p>
             </div>
+            </a>
 
+            <a th:href="@{/produtos?status=vencidos}">
             <div class="card">
                 <div class="icon-wrapper icon-red"><i class="bi bi-x-circle"></i></div>
                 <h2 th:text="${produtosVencidos.size()}">0</h2>
                 <p>Produtos Vencidos</p>
             </div>
+            </a>
         </div>
 
         <!-- Gráficos -->

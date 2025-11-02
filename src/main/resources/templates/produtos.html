@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" th:href="@{/css/sidebar.css}">
     <link rel="stylesheet" th:href="@{/css/produtos.css}">
 </head>
+
 <body>
     <!-- Sidebar -->
     <div th:replace="~{fragments/sidebar :: sidebar}" class="sidebar"></div>
@@ -17,11 +19,11 @@
         <h1>Lista de Produtos</h1>
         <div class="top-bar">
             <form class="search-box" th:action="@{/produtos}" method="get">
-            <i class="bi bi-search"></i>
-            <input type="text" name="nome" th:value="${nome}" placeholder="Pesquisar produtos..." />
-            <button type="submit" style="border:none;background:none;cursor:pointer;">
-        
-    
+                <i class="bi bi-search"></i>
+                <input type="text" name="nome" th:value="${nome}" placeholder="Pesquisar produtos..." />
+                <button type="submit" style="border:none;background:none;cursor:pointer;">
+
+
             </form>
 
             <a th:href="@{/produtos/novo}" class="add-btn">
@@ -38,7 +40,17 @@
                     <th>Quantidade</th>
                     <th>Categoria</th>
                     <th>Preço</th>
-                    <th>Validade</th>
+                    <th>
+                        <form th:action="@{/produtos}" method="get" class="filtro-validade-form">
+                            <label for="status" style="font-weight: bold;">Validade</label>
+                            <select name="status" id="status" onchange="this.form.submit()">
+                                <option value="">Todos</option>
+                                <option value="validos" th:selected="${status == 'validos'}">Válidos</option>
+                                <option value="a_vencer" th:selected="${status == 'a_vencer'}">A vencer</option>
+                                <option value="vencidos" th:selected="${status == 'vencidos'}">Vencidos</option>
+                            </select>
+                        </form>
+                    </th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -61,4 +73,5 @@
         </table>
     </main>
 </body>
+
 </html>
