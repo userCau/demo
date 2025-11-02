@@ -72,6 +72,47 @@
             </tbody>
         </table>
     </main>
+
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Seleciona todos os links de exclusão
+    const deleteLinks = document.querySelectorAll(".btn-delete");
+
+    deleteLinks.forEach(link => {
+        link.addEventListener("click", function (event) {
+            event.preventDefault(); // impede a navegação imediata
+
+            const url = this.getAttribute("href");
+
+            // Cria o pop-up de confirmação
+            const confirmBox = document.createElement("div");
+            confirmBox.innerHTML = `
+                <div class="popup-overlay">
+                    <div class="popup-box">
+                        <h3>Tem certeza que deseja excluir?</h3>
+                        <div class="popup-buttons">
+                            <button id="confirmYes">Sim</button>
+                            <button id="confirmNo">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(confirmBox);
+
+            // Botão SIM → continua a exclusão
+            document.getElementById("confirmYes").addEventListener("click", () => {
+                window.location.href = url;
+            });
+
+            // Botão NÃO → fecha o pop-up
+            document.getElementById("confirmNo").addEventListener("click", () => {
+                confirmBox.remove();
+            });
+        });
+    });
+});
+</script>
+
 </body>
 
 </html>
