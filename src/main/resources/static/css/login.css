@@ -1,7 +1,7 @@
 @import url('vars.css');
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, var(--cor-primaria), var(--cor-secundaria));
     display: flex;
     justify-content: center;
