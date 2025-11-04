@@ -1,126 +1,177 @@
-       body {
-            font-family: 'Poppins', sans-serif;
-            background: #f9fafc;
-            margin: 0;
-            color: #333;
-        }
+/* ===== ESTILO GERAL ===== */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #f9fafc;
+    margin: 0;
+    color: #333;
+}
 
-        main {
-            padding: 40px;
-            margin-left: 250px;
-            min-height: 100vh;
-            background: #f9fafc;
-        }
+main {
+    padding: 40px;
+    margin-left: 250px;
+    min-height: 100vh;
+    background: #f9fafc;
+}
 
-        h1 {
-            font-size: 2rem;
-            font-weight: 600;
-            color: #222;
-            margin-bottom: 35px;
+h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 35px;
+}
 
-        }
+/* ===== DASHBOARD CARDS ===== */
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
 
-        .dashboard-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
-        }
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 25px 20px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
 
-        .card {
-            background: white;
-            border-radius: 16px;
-            padding: 25px 20px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.2s ease, box-shadow 0.3s ease;
-        }
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-        }
+.icon-wrapper {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 15px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.8rem;
+}
 
-        .icon-wrapper {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 15px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.8rem;
-        }
+.icon-blue {
+    background: #007bff;
+}
 
-        .icon-blue {
-            background: #007bff;
-        }
+.icon-green {
+    background: #00b894;
+}
 
-        .icon-green {
-            background: #00b894;
-        }
+.icon-orange {
+    background: #f9a825;
+}
 
-        .icon-orange {
-            background: #f9a825;
-        }
+.icon-red {
+    background: #e53935;
+}
 
-        .icon-red {
-            background: #e53935;
-        }
+.card h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 10px 0;
+}
 
-        .card h2 {
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin: 10px 0;
-        }
+.card p {
+    font-size: 1rem;
+    color: #555;
+    margin: 0;
+}
 
-        .card p {
-            font-size: 1rem;
-            color: #555;
-            margin: 0;
-        }
+/* ===== SEÇÃO DE GRÁFICOS ===== */
+.charts-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+}
 
-        /* Seção de gráficos */
-        .charts-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-        }
+.chart-box {
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+}
 
-        .chart-box {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
-        }
+.chart-box h3 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+    color: #333;
+}
 
-        .chart-box h3 {
-            font-size: 1.2rem;
-            font-weight: 500;
-            margin-bottom: 20px;
-            color: #333;
-        }
+/* ===== ANIMAÇÃO ===== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+.card,
+.chart-box {
+    animation: fadeIn 0.6s ease both;
+}
 
-        .card,
-        .chart-box {
-            animation: fadeIn 0.6s ease both;
-        }
+.dashboard-cards a {
+    text-decoration: none;
+}
 
-        .dashboard-cards a {
-            text-decoration: none;
-        }
+/* ===== ALERTA DE ESTOQUE BAIXO ===== */
+.alerta-estoque-baixo {
+    background-color: #ffe5e5;
+    border: 1px solid #dc3545;
+    color: #b02a37;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    animation: fadeIn 0.6s ease both;
+}
+
+.alerta-estoque-baixo i {
+    font-size: 20px;
+    color: #dc3545;
+    margin-right: 8px;
+}
+
+.alerta-estoque-baixo ul {
+    margin-top: 8px;
+    margin-left: 25px;
+    padding-left: 0;
+}
+
+.alerta-estoque-baixo li {
+    list-style-type: "⚠️ ";
+    margin-bottom: 3px;
+    font-size: 0.95rem;
+}
+
+.btn-ver-produtos {
+    align-self: flex-start;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 14px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.btn-ver-produtos:hover {
+    background-color: #b02a37;
+}

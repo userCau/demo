@@ -15,7 +15,6 @@
 
     <link rel="stylesheet" th:href="@{/css/sidebar.css}">
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
-
 </head>
 
 <body>
@@ -25,14 +24,27 @@
     <main>
         <h1>Dashboard</h1>
 
+        <!-- ⚠️ ALERTA DE ESTOQUE BAIXO -->
+        <div th:if="${temEstoqueBaixo}" class="alerta-estoque-baixo">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <span>
+                <strong>Atenção!</strong> Existem produtos com estoque abaixo do mínimo definido.
+            </span>
+            <ul>
+                <li th:each="p : ${produtosBaixoEstoque}"
+                    th:text="${p.nome + ' (' + p.quantidade + '/' + p.quantidadeMinima + ')'}"></li>
+            </ul>
+            <a th:href="@{/produtos}" class="btn-ver-produtos">Ver Produtos</a>
+        </div>
+
         <!-- Cards -->
         <div class="dashboard-cards">
-            <a th:href="@{/produtos?status=validos}">
-            <div class="card">
-                <div class="icon-wrapper icon-blue"><i class="bi bi-box-seam"></i></div>
-                <h2 th:text="${totalProdutos}">0</h2>
-                <p>Produtos Registrados</p>
-            </div>
+            <a th:href="@{/produtos}">
+                <div class="card">
+                    <div class="icon-wrapper icon-blue"><i class="bi bi-box-seam"></i></div>
+                    <h2 th:text="${totalProdutos}">0</h2>
+                    <p>Produtos Registrados</p>
+                </div>
             </a>
 
             <a th:href="@{/usuarios}">
@@ -44,19 +56,19 @@
             </a>
 
             <a th:href="@{/produtos?status=a_vencer}">
-            <div class="card">
-                <div class="icon-wrapper icon-orange"><i class="bi bi-exclamation-triangle"></i></div>
-                <h2 th:text="${produtosProximoVencimento.size()}">0</h2>
-                <p>Produtos Próximos do Vencimento</p>
-            </div>
+                <div class="card">
+                    <div class="icon-wrapper icon-orange"><i class="bi bi-exclamation-triangle"></i></div>
+                    <h2 th:text="${produtosProximoVencimento.size()}">0</h2>
+                    <p>Produtos Próximos do Vencimento</p>
+                </div>
             </a>
 
             <a th:href="@{/produtos?status=vencidos}">
-            <div class="card">
-                <div class="icon-wrapper icon-red"><i class="bi bi-x-circle"></i></div>
-                <h2 th:text="${produtosVencidos.size()}">0</h2>
-                <p>Produtos Vencidos</p>
-            </div>
+                <div class="card">
+                    <div class="icon-wrapper icon-red"><i class="bi bi-x-circle"></i></div>
+                    <h2 th:text="${produtosVencidos.size()}">0</h2>
+                    <p>Produtos Vencidos</p>
+                </div>
             </a>
         </div>
 
@@ -75,63 +87,55 @@
     </main>
 
     <script th:inline="javascript">
-    // Dados do gráfico de categorias
-    const categoriasData = {
-        labels: /*[[${categorias.keySet()}]]*/ [],
-        datasets: [{
-            data: /*[[${categorias.values()}]]*/ [],
-            backgroundColor: ['#007bff', '#00b894', '#f9a825', '#e53935', '#9b59b6']
-        }]
-    };
+        // Dados do gráfico de categorias
+        const categoriasData = {
+            labels: /*[[${categorias.keySet()}]]*/[],
+            datasets: [{
+                data: /*[[${categorias.values()}]]*/[],
+                backgroundColor: ['#007bff', '#00b894', '#f9a825', '#e53935', '#9b59b6']
+            }]
+        };
 
-    // Dados do gráfico de status
-    const statusLabels = /*[[${status.keySet()}]]*/ [];
-    const statusValues = /*[[${status.values()}]]*/ [];
+        // Dados do gráfico de status
+        const statusLabels = /*[[${status.keySet()}]]*/[];
+        const statusValues = /*[[${status.values()}]]*/[];
 
-    // Função para normalizar textos (remove acentos e deixa minúsculo)
-    const normalize = str => str
-        ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
-        : "";
+        const normalize = str => str
+            ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+            : "";
 
-    // Define cores conforme o nome do status
-    const statusColors = statusLabels.map(label => {
-        const lower = normalize(label);
+        const statusColors = statusLabels.map(label => {
+            const lower = normalize(label);
+            if (lower.includes("vencido")) return "#e53935";
+            if (lower.includes("proximo") || lower.includes("prox")) return "#f9a825";
+            if (lower.includes("estoque")) return "#007bff";
+            return "#9b59b6";
+        });
 
-        if (lower.includes("vencido")) return "#e53935"; // vermelho
-        if (lower.includes("proximo") || lower.includes("prox")) return "#f9a825"; // amarelo
-        if (lower.includes("estoque")) return "#007bff"; // azul
-        return "#9b59b6"; // cor padrão (roxo)
-    });
+        const statusData = {
+            labels: statusLabels,
+            datasets: [{
+                data: statusValues,
+                backgroundColor: statusColors
+            }]
+        };
 
-    const statusData = {
-        labels: statusLabels,
-        datasets: [{
-            data: statusValues,
-            backgroundColor: statusColors
-        }]
-    };
+        new Chart(document.getElementById('chartCategorias'), {
+            type: 'doughnut',
+            data: categoriasData,
+            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+        });
 
-    new Chart(document.getElementById('chartCategorias'), {
-        type: 'doughnut',
-        data: categoriasData,
-        options: {
-            responsive: true,
-            plugins: { legend: { position: 'bottom' } }
-        }
-    });
-
-    new Chart(document.getElementById('chartStatus'), {
-        type: 'bar',
-        data: statusData,
-        options: {
-            responsive: true,
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true } }
-        }
-    });
-</script>
-
-
+        new Chart(document.getElementById('chartStatus'), {
+            type: 'bar',
+            data: statusData,
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+    </script>
 
 </body>
 

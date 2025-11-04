@@ -7,7 +7,7 @@
     box-sizing: border-box;
 }
 
-/* Sidebar */
+/* === SIDEBAR PRINCIPAL === */
 nav.menu-lateral {
     width: 70px;
     height: 100%;
@@ -18,13 +18,60 @@ nav.menu-lateral {
     top: 0;
     left: 0;
     overflow: hidden;
-    transition: 0.2s;
+    transition: width 0.3s ease;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /*coloca o item do usuário no final */
+    justify-content: space-between;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Lista do menu */
+/* === BOTÃO HAMBÚRGUER === */
+.btn-expandir {
+    width: 100%;
+    padding-left: 1px;
+    margin-bottom: 10px;
+}
+
+.btn-expandir>i {
+    color: var(--cor-fundo);
+    font-size: 26px;
+    cursor: pointer;
+}
+
+/* === LOGO DO SISTEMA === */
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 180px;
+    padding: 10px 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.logo-img {
+    width: 150px;
+    /* 🔹 tamanho padrão (sidebar fechada) */
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    transition: all 0.3s ease;
+    opacity: 0.9;
+}
+
+.logo {
+    filter: brightness(0) invert(1);
+}
+
+/* === LOGO MAIOR AO EXPANDIR === */
+nav.menu-lateral:hover .logo-img {
+    width: 200px;
+    /* 🔹 aumenta quando expandida */
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+/* === LISTA DO MENU === */
 ul {
     list-style-type: none;
     display: flex;
@@ -55,13 +102,13 @@ ul li.item-menu a .txt-link {
     margin-left: 40px;
 }
 
-ul li.item-menu a .icon > i {
+ul li.item-menu a .icon>i {
     font-size: 30px;
 }
 
-/* Usuário no final da sidebar */
+/* === USUÁRIO NO FINAL DA SIDEBAR === */
 li.usuario {
-    margin-top: auto; /* 🔥 empurra para o final */
+    margin-top: auto;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
     padding-top: 15px;
 }
@@ -75,8 +122,7 @@ li.usuario a {
     padding: 15px 4%;
 }
 
-
-li.usuario a .icon > i {
+li.usuario a .icon>i {
     font-size: 30px;
 }
 
@@ -84,7 +130,17 @@ li.usuario a .txt-link {
     margin-left: 40px;
 }
 
-/* Expansão lateral */
+/* === AVATAR DO USUÁRIO === */
+.avatar-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+/* === EXPANSÃO LATERAL === */
 nav.menu-lateral:hover {
     width: 300px;
 }
@@ -92,21 +148,9 @@ nav.menu-lateral:hover {
 main {
     margin-left: 70px;
     padding: 20px;
-    transition: margin-left 0.2s;
+    transition: margin-left 0.3s ease;
 }
 
-.menu-lateral:hover ~ main {
+.menu-lateral:hover~main {
     margin-left: 300px;
 }
-
-nav {
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-.btn-expandir { 
-    width: 100%; padding-left: 1px; 
-} 
-.btn-expandir > i {
-     color: var(--cor-fundo); 
-     font-size: 26px; cursor: pointer; 
-    }

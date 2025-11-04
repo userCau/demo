@@ -1,15 +1,19 @@
-<nav th:fragment="sidebar"
-     class="menu-lateral"
-     xmlns:th="http://www.thymeleaf.org"
-     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<nav th:fragment="sidebar" class="menu-lateral" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
+    <!-- Botão de menu -->
     <div class="btn-expandir">
         <i class="bi bi-list"></i>
     </div>
 
-        
+    <!-- Logo (agora logo abaixo do botão) -->
+    <div class="logo-container logo">
+        <a th:href="@{/}">
+            <img th:src="@{/images/GESTOK.png}" alt="Logo GESTOK" class="logo-img">
+        </a>
+    </div>
 
-
+    <!-- Menu -->
     <ul>
         <li class="item-menu">
             <a th:href="@{/}">
@@ -25,7 +29,6 @@
             </a>
         </li>
 
-        <!-- Só ADMIN pode ver esta opção -->
         <li class="item-menu" sec:authorize="hasRole('ADMIN')">
             <a th:href="@{/usuarios}">
                 <span class="icon"><i class="bi bi-people"></i></span>
@@ -45,15 +48,15 @@
                 <span class="icon"><i class="bi bi-box-arrow-left"></i></span>
                 <span class="txt-link">Sair</span>
             </a>
-        </li>  
-
-        
-
+        </li>
 
         <li class="usuario">
-            <a th:href="@{#}">
-            <span class="icon"><i class="bi bi-person-circle"></i></span>
-            <span class="txt-link" th:text="${usuarioNome != null ? usuarioNome : 'Usuário'}"></span>
+            <a th:href="@{/usuarios/config}">
+                <span class="icon">
+                    <img th:src="${usuarioAvatar != null ? usuarioAvatar : 'https://ui-avatars.com/api/?name=' + usuarioNome}"
+                        alt="Avatar" class="avatar-img">
+                </span>
+                <span class="txt-link" th:text="${usuarioNome != null ? usuarioNome : 'Usuário'}"></span>
             </a>
         </li>
     </ul>

@@ -39,20 +39,23 @@ public class ProdutoService {
         return produtoRepository.findByNomeContainingIgnoreCase(nome);
     }
 
-    // 🔹 Novo: contar produtos por categoria
+    // 🔹 Contar produtos por categoria
     public Map<String, Long> contarPorCategoria() {
         return produtoRepository.findAll().stream()
                 .collect(Collectors.groupingBy(Produto::getCategoria, Collectors.counting()));
     }
 
-    // 🔹 Novo: contar produtos por status (validade)
+    // 🔹 Contar produtos por status (validade)
     public Map<String, Long> contarPorStatus() {
         return produtoRepository.findAll().stream()
                 .collect(Collectors.groupingBy(produto -> {
-                    if (produto.getValidade() == null) return "Sem validade";
-                    if (produto.getValidade().isBefore(LocalDate.now())) return "Vencido";
-                    if (produto.getValidade().isBefore(LocalDate.now().plusDays(7))) return "Próx. vencimento";
-                    return "Em estoque";
+                    if (produto.getValidade() == null)
+                        return "Sem validade";
+                    if (produto.getValidade().isBefore(LocalDate.now()))
+                        return "Vencido";
+                    if (produto.getValidade().isBefore(LocalDate.now().plusDays(7)))
+                        return "Próx. vencimento";
+                    return "Válido";
                 }, Collectors.counting()));
     }
 
@@ -66,5 +69,13 @@ public class ProdutoService {
 
     public List<Produto> buscarPorValidadeDepoisDe(LocalDate data) {
         return produtoRepository.findByValidadeAfter(data);
+    }
+
+    // 🔹 Novo: buscar produtos com estoque abaixo do mínimo
+    public List<Produto> buscarComEstoqueBaixo() {
+        return produtoRepository.findAll().stream()
+                .filter(p -> p.getEstoqueMinimo() != null && p.getQuantidade() != null)
+                .filter(p -> p.getQuantidade() <= p.getEstoqueMinimo())
+                .collect(Collectors.toList());
     }
 }

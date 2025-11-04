@@ -1,52 +1,67 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Produto</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" th:href="@{/css/sidebar.css}">
-    <link rel="stylesheet" th:href="@{/css/welcome.css}">
-    <link rel="stylesheet" th:href="@{/css/produtoCadastro.css}">
 
+    <!-- Ícones Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}">
+    <link rel="stylesheet" th:href="@{/css/produtoCadastro.css}">
 </head>
+
 <body>
+    <!-- Sidebar -->
     <div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
-    <form th:action="@{/produtos/salvar}" th:object="${produto}" method="post">
-    <input type="hidden" th:field="*{id}">
+    <!-- Conteúdo principal -->
+    <main>
+        <form th:action="@{/produtos/salvar}" th:object="${produto}" method="post">
+            <input type="hidden" th:field="*{id}">
 
-    <h2>Formulário de Produto</h2>
+            <h2><i class="bi bi-box-seam"></i> Cadastro de Produto</h2>
 
-    <label for="nome">Produto:</label>
-    <input type="text" id="nome" th:field="*{nome}" required>
+            <label for="nome">Produto:</label>
+            <input type="text" id="nome" th:field="*{nome}" required>
 
-    <label for="descricao">Descrição:</label>
-    <textarea id="descricao" th:field="*{descricao}" rows="3" required></textarea>
+            <label for="descricao">Descrição:</label>
+            <textarea id="descricao" th:field="*{descricao}" rows="3" required></textarea>
 
-    <label for="quantidade">Quantidade</label>
-    <input type="number" id="quantidade" name="quantidade" class="form-control" th:field="*{quantidade}" required>
+            <label for="quantidade">Quantidade:</label>
+            <input type="number" id="quantidade" th:field="*{quantidade}" min="0" required>
 
-    <label for="categoria">Categoria:</label>
-    <select id="categoria" th:field="*{categoria}" required>
-        <option value="">Selecione</option>
-        <option value="Alimentício">Alimentos</option>
-        <option value="Limpeza">Limpeza e Higiene</option>
-        <option value="Vestuário">Vestuário</option>
-        <option value="Bebidas">Bebidas</option>
-        
-        
-    </select>
+            <!-- NOVO CAMPO: Valor mínimo de estoque -->
+            <label for="estoqueMinimo">Estoque Mínimo:</label>
+            <input type="number" id="estoqueMinimo" th:field="*{estoqueMinimo}" min="0" placeholder="Ex: 10" required>
 
-    <label for="preco">Preço:</label>
-    <input type="number" id="preco" th:field="*{preco}" step="0.01" required>
+            <label for="categoria">Categoria:</label>
+            <select id="categoria" th:field="*{categoria}" required>
+                <option value="">Selecione</option>
+                <option value="Alimentício">Alimentos</option>
+                <option value="Limpeza">Limpeza e Higiene</option>
+                <option value="Vestuário">Vestuário</option>
+                <option value="Bebidas">Bebidas</option>
+            </select>
 
-    <label for="validade">Validade:</label>
-    <input type="date" id="validade" th:field="*{validade}" required>
+            <label for="preco">Preço:</label>
+            <input type="number" id="preco" th:field="*{preco}" step="0.01" min="0" required>
 
-    <button type="submit">Cadastrar</button>
-</form>
+            <label for="validade">Validade:</label>
+            <input type="date" id="validade" th:field="*{validade}" required>
 
-    </form>
+            <button type="submit">
+                <i class="bi bi-check-circle"></i> Cadastrar Produto
+            </button>
+
+            <a th:href="@{/produtos}" class="back-btn">
+                <i class="bi bi-arrow-left-circle"></i> Voltar para lista
+            </a>
+        </form>
+    </main>
 </body>
+
 </html>
