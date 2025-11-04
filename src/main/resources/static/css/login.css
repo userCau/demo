@@ -88,3 +88,7 @@ button:hover {
 .footer-text a:hover {
     text-decoration: underline;
 }
+
+.logo {
+  filter: brightness(0) saturate(100%) invert(23%) sepia(83%) saturate(5072%) hue-rotate(260deg) brightness(90%) contrast(98%);
+}
