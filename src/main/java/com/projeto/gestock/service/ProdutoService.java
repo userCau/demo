@@ -7,17 +7,29 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.projeto.gestock.model.Produto;
+import com.projeto.gestock.model.Usuario;
+import com.projeto.gestock.model.Categoria;
 import com.projeto.gestock.repository.ProdutoRepository;
+import com.projeto.gestock.repository.UsuarioRepository;
 
 @Service
 public class ProdutoService {
 
     private final ProdutoRepository produtoRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final CategoriaService categoriaService;
 
-    public ProdutoService(ProdutoRepository produtoRepository) {
+    public ProdutoService(ProdutoRepository produtoRepository,
+            UsuarioRepository usuarioRepository,
+            CategoriaService categoriaService) {
         this.produtoRepository = produtoRepository;
+        this.usuarioRepository = usuarioRepository;
+        this.categoriaService = categoriaService;
     }
 
+    // =====================================================
+    // CRUD BÁSICO
+    // =====================================================
     public List<Produto> listarTodos() {
         return produtoRepository.findAll();
     }
@@ -28,6 +40,19 @@ public class ProdutoService {
     }
 
     public Produto salvar(Produto produto) {
+        // ✅ Verifica e salva categoria corretamente
+        if (produto.getCategoria() != null && produto.getCategoria().getNome() != null) {
+            Categoria categoria = categoriaService.salvarNovaCategoria(produto.getCategoria().getNome());
+            produto.setCategoria(categoria);
+        }
+
+        // ✅ Garante que o usuário associado existe
+        if (produto.getCriadoPor() != null && produto.getCriadoPor().getId() != null) {
+            Usuario usuario = usuarioRepository.findById(produto.getCriadoPor().getId())
+                    .orElse(produto.getCriadoPor());
+            produto.setCriadoPor(usuario);
+        }
+
         return produtoRepository.save(produto);
     }
 
@@ -39,13 +64,16 @@ public class ProdutoService {
         return produtoRepository.findByNomeContainingIgnoreCase(nome);
     }
 
-    // 🔹 Contar produtos por categoria
+    // =====================================================
+    // RELATÓRIOS E CONTAGENS
+    // =====================================================
     public Map<String, Long> contarPorCategoria() {
         return produtoRepository.findAll().stream()
-                .collect(Collectors.groupingBy(Produto::getCategoria, Collectors.counting()));
+                .collect(Collectors.groupingBy(
+                        produto -> produto.getCategoria() != null ? produto.getCategoria().getNome() : "Sem categoria",
+                        Collectors.counting()));
     }
 
-    // 🔹 Contar produtos por status (validade)
     public Map<String, Long> contarPorStatus() {
         return produtoRepository.findAll().stream()
                 .collect(Collectors.groupingBy(produto -> {
@@ -59,6 +87,9 @@ public class ProdutoService {
                 }, Collectors.counting()));
     }
 
+    // =====================================================
+    // CONSULTAS DE VALIDADE
+    // =====================================================
     public List<Produto> buscarPorValidadeAntesDe(LocalDate data) {
         return produtoRepository.findByValidadeBefore(data);
     }
@@ -71,7 +102,9 @@ public class ProdutoService {
         return produtoRepository.findByValidadeAfter(data);
     }
 
-    // 🔹 Novo: buscar produtos com estoque abaixo do mínimo
+    // =====================================================
+    // ESTOQUE
+    // =====================================================
     public List<Produto> buscarComEstoqueBaixo() {
         return produtoRepository.findAll().stream()
                 .filter(p -> p.getEstoqueMinimo() != null && p.getQuantidade() != null)

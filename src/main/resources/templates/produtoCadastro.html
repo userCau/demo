@@ -39,12 +39,10 @@
             <input type="number" id="estoqueMinimo" th:field="*{estoqueMinimo}" min="0" placeholder="Ex: 10" required>
 
             <label for="categoria">Categoria:</label>
-            <select id="categoria" th:field="*{categoria}" required>
-                <option value="">Selecione</option>
-                <option value="Alimentício">Alimentos</option>
-                <option value="Limpeza">Limpeza e Higiene</option>
-                <option value="Vestuário">Vestuário</option>
-                <option value="Bebidas">Bebidas</option>
+            <select id="categoria" th:field="*{categoria.id}" required>
+                <option value="" disabled selected>Selecione...</option>
+                <option th:each="cat : ${categorias}" th:value="${cat.id}" th:text="${cat.nome}">
+                </option>
             </select>
 
             <label for="preco">Preço:</label>

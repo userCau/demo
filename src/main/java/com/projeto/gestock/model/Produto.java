@@ -1,11 +1,6 @@
 package com.projeto.gestock.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -18,19 +13,57 @@ public class Produto {
     private String nome;
     private String descricao;
     private Integer quantidade;
-    private String categoria;
     private Double preco;
     private LocalDate validade;
 
-    // Atributo persistido: quantidade mínima de estoque para esse produto
+    // =====================================================
+    // RELACIONAMENTOS
+    // =====================================================
+
+    // Relação com Categoria (muitos produtos para uma categoria)
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
+
+    // Relação com Usuário (quem criou o produto)
+    @ManyToOne
+    @JoinColumn(name = "criado_por_id")
+    private Usuario criadoPor;
+
+    // =====================================================
+    // CAMPOS DE CONTROLE E EXIBIÇÃO
+    // =====================================================
+
     @Column(name = "estoque_minimo")
     private Integer estoqueMinimo;
 
-    // Atributo temporário para a view
+    // Campo temporário (não vai para o banco)
     @Transient
     private String status;
 
-    // Getters e Setters
+    // =====================================================
+    // CONSTRUTORES
+    // =====================================================
+
+    public Produto() {
+    }
+
+    public Produto(String nome, String descricao, Integer quantidade, Double preco,
+            LocalDate validade, Categoria categoria, Integer estoqueMinimo, Usuario criadoPor) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.quantidade = quantidade;
+        this.preco = preco;
+        this.validade = validade;
+        this.categoria = categoria;
+        this.estoqueMinimo = estoqueMinimo;
+        this.criadoPor = criadoPor;
+    }
+
+    // =====================================================
+    // GETTERS E SETTERS
+    // =====================================================
+
     public Long getId() {
         return id;
     }
@@ -55,12 +88,12 @@ public class Produto {
         this.descricao = descricao;
     }
 
-    public String getCategoria() {
-        return categoria;
+    public Integer getQuantidade() {
+        return quantidade;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public void setQuantidade(Integer quantidade) {
+        this.quantidade = quantidade;
     }
 
     public Double getPreco() {
@@ -79,20 +112,20 @@ public class Produto {
         this.validade = validade;
     }
 
-    public String getStatus() {
-        return status;
+    public Categoria getCategoria() {
+        return categoria;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 
-    public Integer getQuantidade() {
-        return quantidade;
+    public Usuario getCriadoPor() {
+        return criadoPor;
     }
 
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
+    public void setCriadoPor(Usuario criadoPor) {
+        this.criadoPor = criadoPor;
     }
 
     public Integer getEstoqueMinimo() {
@@ -103,17 +136,37 @@ public class Produto {
         this.estoqueMinimo = estoqueMinimo;
     }
 
-    /**
-     * Indica se o produto está em nível de estoque baixo (<= estoqueMinimo).
-     * Trata nulls: se estoqueMinimo for null, considera que não há limite definido
-     * -> retorna false.
-     */
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    // =====================================================
+    // MÉTODOS AUXILIARES
+    // =====================================================
+
     @Transient
     public boolean isEstoqueBaixo() {
-        if (this.estoqueMinimo == null)
-            return false;
-        if (this.quantidade == null)
+        if (this.estoqueMinimo == null || this.quantidade == null)
             return false;
         return this.quantidade <= this.estoqueMinimo;
+    }
+
+    @Transient
+    public boolean isVencido() {
+        if (this.validade == null)
+            return false;
+        return this.validade.isBefore(LocalDate.now());
+    }
+
+    @Transient
+    public boolean isProximoVencimento() {
+        if (this.validade == null)
+            return false;
+        LocalDate hoje = LocalDate.now();
+        return !this.validade.isBefore(hoje) && this.validade.isBefore(hoje.plusDays(7));
     }
 }

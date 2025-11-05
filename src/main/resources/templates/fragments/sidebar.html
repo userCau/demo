@@ -27,6 +27,14 @@
                 <span class="icon"><i class="bi bi-basket3"></i></span>
                 <span class="txt-link">Produtos</span>
             </a>
+
+        </li>
+
+        <li class="item-menu">
+            <a th:href="@{/categorias}">
+                <span class="icon"><i class="bi bi-tags"></i></span>
+                <span class="txt-link">Categorias</span>
+            </a>
         </li>
 
         <li class="item-menu" sec:authorize="hasRole('ADMIN')">

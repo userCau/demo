@@ -12,47 +12,6 @@
     <!-- CSS -->
     <link rel="stylesheet" th:href="@{/css/sidebar.css}">
     <link rel="stylesheet" th:href="@{/css/produtos.css}">
-
-    <style>
-        /* === ESTILO DO ALERTA DE ESTOQUE BAIXO === */
-        .estoque-baixo {
-            background-color: #ffe5e5 !important;
-            color: #c0392b;
-            font-weight: bold;
-        }
-
-        .estoque-alerta {
-            color: #e74c3c;
-            margin-left: 6px;
-            font-size: 18px;
-            vertical-align: middle;
-            animation: piscar 1.2s infinite alternate;
-        }
-
-        @keyframes piscar {
-            from {
-                opacity: 1;
-            }
-
-            to {
-                opacity: 0.4;
-            }
-        }
-
-        /* Alerta no topo da página */
-        .estoque-aviso {
-            background-color: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeeba;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-    </style>
 </head>
 
 <body>
@@ -63,10 +22,22 @@
     <main>
         <h1>Lista de Produtos</h1>
 
-        <!-- 🔔 AVISO DE ESTOQUE BAIXO (somente se existir algum produto crítico) -->
-        <div th:if="${produtos.?[estoqueBaixo].size() > 0}" class="estoque-aviso">
+        <!-- 🔔 AVISO DE ESTOQUE BAIXO -->
+        <div th:if="${temEstoqueBaixo}" class="estoque-aviso">
             <i class="bi bi-exclamation-triangle-fill"></i>
             Alguns produtos estão com estoque abaixo do mínimo! Verifique na lista abaixo.
+        </div>
+
+        <!-- 🔔 AVISO DE PRODUTOS VENCIDOS -->
+        <div th:if="${temVencidos}" class="estoque-aviso">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            Alguns produtos estão<strong>vencidos!</strong> Verifique na lista abaixo.
+        </div>
+
+        <!-- 🔔 AVISO DE PRODUTOS PRÓXIMOS DO VENCIMENTO -->
+        <div th:if="${temProximoVencimento}" class="estoque-aviso">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            Alguns produtos estão<strong>próximos do vencimento!</strong> Verifique na lista abaixo.
         </div>
 
         <!-- Barra superior -->
@@ -105,28 +76,51 @@
             </thead>
             <tbody>
                 <!-- Caso existam produtos -->
-                <tr th:each="produto : ${produtos}" th:classappend="${produto.estoqueBaixo} ? 'estoque-baixo'">
+                <tr th:each="produto : ${produtos}" th:classappend="
+                        ${produto.estoqueBaixo} ? 'estoque-baixo' :
+                        (${produto.validade.isBefore(T(java.time.LocalDate).now())} ? 'vencido' :
+                        (${produto.validade.isBefore(T(java.time.LocalDate).now().plusDays(7))} ? 'a-vencer' : ''))">
+
                     <td th:text="${produto.id}"></td>
                     <td th:text="${produto.nome}"></td>
                     <td th:text="${produto.descricao}"></td>
+
                     <td>
                         <span th:text="${produto.quantidade}"></span>
-                        <!-- Ícone de alerta -->
                         <i class="bi bi-exclamation-circle-fill estoque-alerta" th:if="${produto.estoqueBaixo}"
                             title="Estoque abaixo do mínimo!"></i>
                     </td>
-                    <td th:text="${produto.categoria}"></td>
-                    <td th:text="'R$ ' + ${produto.preco}"></td>
-                    <td th:text="${#temporals.format(produto.validade, 'dd/MM/yyyy')}"></td>
+
+                    <td th:text="${produto.categoria != null ? produto.categoria.nome : '—'}"></td>
+                    <td th:text="'R$' + ${#numbers.formatDecimal(produto.preco, 2, 'POINT', 2, 'COMMA')}"></td>
+
                     <td>
-                        <a th:href="@{|/produtos/editar/${produto.id}|}" class="btn-action btn-edit">Editar</a>
-                        <a th:href="@{|/produtos/deletar/${produto.id}|}" class="btn-action btn-delete">Apagar</a>
+                        <span th:text="${#temporals.format(produto.validade, 'dd/MM/yyyy')}"></span>
+
+                        <!-- Ícone para produto vencido -->
+                        <i class="bi bi-exclamation-circle-fill validade-alerta"
+                            th:if="${produto.validade.isBefore(T(java.time.LocalDate).now())}"
+                            title="Produto vencido!"></i>
+
+                        <!-- Ícone para produto a vencer -->
+                        <i class="bi bi-exclamation-circle-fill validade-alerta"
+                            th:if="${produto.validade.isAfter(T(java.time.LocalDate).now()) and produto.validade.isBefore(T(java.time.LocalDate).now().plusDays(7))}"
+                            title="Produto próximo do vencimento!"></i>
+                    </td>
+
+                    <td>
+                        <a th:href="@{|/produtos/editar/${produto.id}|}" class="btn-action btn-edit">
+                            <i class="bi bi-pencil-square"></i> Editar
+                        </a>
+                        <a th:href="@{|/produtos/deletar/${produto.id}|}" class="btn-action btn-delete">
+                            <i class="bi bi-trash"></i> Apagar
+                        </a>
                     </td>
                 </tr>
 
                 <!-- Caso a lista esteja vazia -->
                 <tr th:if="${#lists.isEmpty(produtos)}">
-                    <td colspan="8" style="text-align:center; color:#888; font-style:italic; padding:20px;">
+                    <td colspan="8" class="no-products">
                         Nenhum produto encontrado com os filtros selecionados.
                     </td>
                 </tr>
@@ -143,12 +137,12 @@
                 <label>Nome:</label>
                 <input type="text" name="nome" placeholder="Digite o nome do produto" th:value="${nome}">
 
-                <label>Categoria:</label>
+                <label for="categoria">Categoria:</label>
                 <select name="categoria">
-                    <option value="">Todas</option>
-                    <option value="Alimentício" th:selected="${categoria == 'Alimentício'}">Alimentício</option>
-                    <option value="Limpeza" th:selected="${categoria == 'Limpeza'}">Limpeza</option>
-                    <option value="Higiene" th:selected="${categoria == 'Higiene'}">Higiene</option>
+                    <option value="" disabled selected>Todos</option>
+                    <option th:each="cat : ${categorias}" th:value="${cat.nome}" th:text="${cat.nome}"
+                        th:selected="${categoria == cat.nome}">
+                    </option>
                 </select>
 
                 <label>Preço mínimo:</label>
@@ -166,49 +160,52 @@
                 </select>
 
                 <div class="filter-popup-buttons">
-                    <button type="submit" class="apply-filter-btn"><i class="bi bi-check-circle"></i> Aplicar</button>
+                    <button type="submit" class="apply-filter-btn">
+                        <i class="bi bi-check-circle"></i> Aplicar
+                    </button>
                     <button type="button" class="close-filter-btn" id="closeFilter">Cancelar</button>
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- === SCRIPT === -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // --- Pop-up de filtro ---
             const openBtn = document.getElementById("openFilter");
             const closeBtn = document.getElementById("closeFilter");
             const popup = document.getElementById("filterPopup");
 
+            // Abrir e fechar popup de filtro
             openBtn.addEventListener("click", () => popup.classList.add("active"));
             closeBtn.addEventListener("click", () => popup.classList.remove("active"));
             popup.addEventListener("click", e => {
                 if (e.target === popup) popup.classList.remove("active");
             });
 
-            // --- Confirmação de exclusão ---
-            const deleteLinks = document.querySelectorAll(".btn-delete");
-            deleteLinks.forEach(link => {
-                link.addEventListener("click", function (event) {
-                    event.preventDefault();
-                    const url = this.getAttribute("href");
+            // SweetAlert exclusão
+            document.querySelectorAll(".btn-delete").forEach(btn => {
+                btn.addEventListener("click", e => {
+                    e.preventDefault();
+                    const url = btn.getAttribute("href");
 
-                    const confirmBox = document.createElement("div");
-                    confirmBox.innerHTML = `
-                    <div class="popup-overlay">
-                        <div class="popup-box">
-                            <h3>Tem certeza que deseja excluir?</h3>
-                            <div class="popup-buttons">
-                                <button id="confirmYes">Sim</button>
-                                <button id="confirmNo">Cancelar</button>
-                            </div>
-                        </div>
-                    </div>`;
-                    document.body.appendChild(confirmBox);
-
-                    document.getElementById("confirmYes").addEventListener("click", () => window.location.href = url);
-                    document.getElementById("confirmNo").addEventListener("click", () => confirmBox.remove());
+                    Swal.fire({
+                        title: "Tem certeza?",
+                        text: "Essa ação não poderá ser desfeita!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#6c757d",
+                        confirmButtonText: "Sim, excluir!",
+                        cancelButtonText: "Cancelar"
+                    }).then(result => {
+                        if (result.isConfirmed) {
+                            window.location.href = url;
+                        }
+                    });
                 });
             });
         });

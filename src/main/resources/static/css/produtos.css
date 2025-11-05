@@ -38,10 +38,38 @@ h1 {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* ===== ALERTAS DE VALIDADE ===== */
+.vencido {
+    background-color: #ffcccc !important;
+    color: #b22222;
+    font-weight: bold;
+}
+
+.a-vencer {
+    background-color: #fff5e6 !important;
+    color: #e67e22;
+    font-weight: bold;
+}
+
+.validade-alerta {
+    margin-left: 6px;
+    font-size: 18px;
+    vertical-align: middle;
+    animation: piscar 1.2s infinite alternate;
+}
+
+.vencido .validade-alerta {
+    color: #c0392b;
+}
+
+.a-vencer .validade-alerta {
+    color: #f5680b;
+}
+
 /* ===== LINHA E ÍCONE DE ALERTA ===== */
 .estoque-baixo {
-    background-color: #ffe5e5 !important;
-    color: #c0392b;
+    background-color: #ffe5e6 !important;
+    color: #ffae00;
     font-weight: bold;
 }
 
@@ -156,6 +184,12 @@ table {
 th,
 td {
     padding: 12px 15px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+th:nth-child(3),
+td:nth-child(3) {
     text-align: left;
 }
 

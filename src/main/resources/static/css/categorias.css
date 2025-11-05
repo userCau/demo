@@ -1,0 +1,170 @@
+/* ===== LAYOUT GERAL ===== */
+body {
+    display: flex;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f4f4f9;
+    font-family: 'Poppins', sans-serif;
+}
+
+.sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background-color: #4b00ff;
+}
+
+main {
+    flex-grow: 1;
+    padding: 40px;
+    margin-left: 250px;
+     display: flex;
+    flex-direction: column;
+    align-items: center; /* 🔹 centraliza horizontalmente */
+    justify-content: flex-start; /* 🔹 mantém o conteúdo começando de cima */
+    min-height: 100vh;
+    text-align: center; /* 🔹 centraliza textos dentro de main */
+}
+
+/* ===== TÍTULO ===== */
+h1 {
+    text-align: center;
+    color: #007bff;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+/* ===== FORMULÁRIO DE ADIÇÃO ===== */
+.add-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: fit-content;
+    margin: 0 auto 25px auto;
+}
+
+.add-form input {
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 250px;
+    font-size: 15px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.add-form input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.4);
+}
+
+.add-form button {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-form button:hover {
+    background-color: #0069d9;
+}
+
+/* ===== TABELA ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+th,
+td {
+    padding: 12px 15px;
+    text-align: center;
+    font-size: 15px;
+}
+
+th {
+    background-color: #007bff;
+    color: white;
+    font-weight: 600;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+    background-color: #e6f0ff;
+}
+
+/* ===== BOTÕES DE AÇÃO ===== */
+.btn-action {
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 14px;
+    color: white;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+
+    main {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+    .add-form {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .add-form input {
+        width: 100%;
+    }
+
+    table,
+    th,
+    td {
+        font-size: 13px;
+        padding: 8px;
+    }
+}
